@@ -2,6 +2,11 @@
 
 不含内容的直播助手运行框架：接收事件，调用使用者提供的建议模块，管理提醒展示与反馈，并输出运行诊断。
 
+由[夜霜（FrostyNight）](https://github.com/frostynight-furry)发起并维护，源自 [FurryUP Studio](https://frostynight.top/furryup) 的通用组件。
+
+- **主播使用完整产品**：[了解 FurryUP Studio](https://frostynight.top/furryup) · [下载安装包](https://github.com/frostynight-furry/furryup-studio-releases)
+- **开发者使用组件**：[快速体验](#快速体验) · [最小接入](#最小接入) · [API 文档](docs/API.md) · [English](README.en.md)
+
 框架不包含课件、话术、提示词、运营策略、真实直播记录或内置模型服务。无需安装 FurryUP Studio、登录账号或连接直播平台，即可运行合成演示。
 
 ## 快速体验
@@ -54,3 +59,23 @@ node scripts/archive.cjs ../assistant-core-0.2.0.tar
 打包使用系统 `tar`，逐项核对实际归档文件与已审查源文件的 SHA-256。源码白名单和通用敏感信息检查可公开运行；维护者还须在私有环境中对实际归档执行内容参考库检查。通用检查通过不代表已完成私有内容审查。
 
 源码采用 MIT 许可，公开仓库为 [frostynight-furry/furryup-live-assistant-core](https://github.com/frostynight-furry/furryup-live-assistant-core)。`private: true` 阻止误发布到 npm；CI 仅运行检查，不执行自动发布。
+
+## 关于夜霜与 FurryUP Studio
+
+[夜霜（FrostyNight）](https://github.com/frostynight-furry)是本项目的发起者与维护者。[FurryUP Studio](https://frostynight.top/furryup) 是面向主播的桌面产品，通过统一界面组织直播工作流，并提供安装和更新体验；安装包与发行说明见[下载仓库](https://github.com/frostynight-furry/furryup-studio-releases)。
+
+本仓库发布可独立集成的通用助手框架，不包含完整 FurryUP Studio 产品。使用组件无需安装或登录完整产品；内容、模型服务与业务策略由集成方提供。
+
+## 自愿致谢
+
+欢迎在项目 README、文档或“关于”页提及所使用的组件及维护者。可复制以下示例：
+
+```markdown
+本项目使用 [FurryUP Live Assistant Core](https://github.com/frostynight-furry/furryup-live-assistant-core)。该组件由[夜霜（FrostyNight）](https://github.com/frostynight-furry)发起并维护，源自 [FurryUP Studio](https://frostynight.top/furryup)。
+```
+
+```markdown
+This project uses [FurryUP Live Assistant Core](https://github.com/frostynight-furry/furryup-live-assistant-core), initiated and maintained by [FrostyNight (夜霜)](https://github.com/frostynight-furry). This component originated in [FurryUP Studio](https://frostynight.top/furryup).
+```
+
+上述致谢和链接完全自愿，不增加任何 MIT 许可条件。MIT 对版权声明及许可声明的保留要求仍然有效，详见 [LICENSE](LICENSE)。致谢不表示夜霜或 FurryUP Studio 对衍生项目、产品或服务的官方背书。
