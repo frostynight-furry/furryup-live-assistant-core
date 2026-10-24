@@ -14,3 +14,9 @@ The review used official documentation and repository metadata. It did not measu
 The existing FurryUP display lifecycle and literal renderer were reused after removing domain mappings. Node standard libraries cover the remaining bounded, in-process primitives without adding a general workflow engine. A general effects engine would increase packaging and license work while leaving session fencing, content separation and human feedback semantics unresolved.
 
 These choices apply to the small initial runtime. A future provider, storage driver or collector requires its own compatibility and license review before inclusion.
+
+## Realtime extension review (0.2)
+
+[XState actors](https://stately.ai/docs/actors) and [parallel states](https://stately.ai/docs/parallel-states) were rechecked against the official documentation, along with its [MIT license](https://github.com/statelyai/xstate/blob/main/LICENSE). Its actor model provides serialized state transitions and snapshots; it is a suitable optional host integration when independent state regions become complex. Current documentation also presents v6 alpha, so any direct integration must select and test a stable version explicitly.
+
+This extension reuses the existing JSON contracts, provider coordinator and cancellation semantics. It adds only timestamped facts, dependency versions and explicit reservation accounting. XState does not supply the required fact freshness contract, durable cost reservation rules or private-content boundary. Replacing the current small synchronous store with a general actor system would still require those additions and expand the dependency and packaging surface; no XState runtime or source is bundled. The API keeps snapshot and subscription boundaries compatible with an external actor adapter. This decision is based on API fit, not a claim that no open-source state engine exists.

@@ -37,4 +37,25 @@ async function replay() {
     transitions.push({ action, pending: state.pending.length, displayed: state.current?.id || null, terminal: state.history.map(row => row.state) });
   } return { synthetic: true, transitions, diagnostics: simulation.snapshot().trace }; } finally { simulation.dispose(); }
 }
-module.exports = { createSimulation, replay };
+async function replayRealtime() {
+  const { createRealtimeState, createAnalysisBudget, createAnalysisScheduler } = require('../core/index.cjs');
+  let at = 100, finish, calls = 0;
+  const state = createRealtimeState({ now: () => at }); state.start('synthetic-session');
+  const update = value => state.patch([{ key: 'fixture', source: 'synthetic', status: 'known', value, observedAt: at, ttlMs: 100 }]);
+  update(1); const original = state.capture(['fixture']);
+  // Tiny fixture numbers exercise accounting; they are not production limits.
+  const budget = createAnalysisBudget({ capacity: 2, windowMs: 1000, minIntervalMs: 0, now: () => at });
+  const scheduler = createAnalysisScheduler({ state, budget, now: () => at,
+    provider: () => { calls++; return calls === 1 ? new Promise(resolve => { finish = resolve; }) : { mode: 'observe' }; } });
+  try {
+    const pending = scheduler.request({ key: 'fixture-version-one', context: { synthetic: true }, dependencies: ['fixture'] });
+    at = 110; update(1); const timestampRefreshPreserved = state.isCurrent(original);
+    at = 120; update(2); const obsolete = await pending; finish({ mode: 'observe' });
+    const second = await scheduler.request({ key: 'fixture-version-two', context: { synthetic: true }, dependencies: ['fixture'] });
+    const duplicate = await scheduler.request({ key: 'fixture-version-two', context: { synthetic: true } });
+    update(3); const exhausted = await scheduler.request({ key: 'fixture-version-three', context: { synthetic: true } });
+    return { synthetic: true, timestampRefreshPreserved, obsolete: obsolete.status, current: second.status,
+      duplicate: duplicate.status, exhausted: exhausted.status, calls, budget: budget.snapshot(), checkpoint: budget.checkpoint() };
+  } finally { scheduler.dispose(); state.stop(); }
+}
+module.exports = { createSimulation, replay, replayRealtime };

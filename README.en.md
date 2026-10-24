@@ -6,18 +6,21 @@ Requires Node.js 22.12+. No dependency installation, FurryUP account, platform c
 
 ```sh
 node examples/replay.cjs
+node examples/replay.cjs --realtime
 node examples/server.cjs
 node scripts/verify.cjs
 ```
 
 The simulator listens only on loopback and uses synthetic data. Providers explicitly return `observe`, `remember` or `suggest`. Ingesting events does not trigger inference. The runtime never sends chat messages or executes returned commands.
 
+Realtime facts distinguish fresh, stale and unknown observations. Scoped dependency tokens fence obsolete analysis. Explicit rolling budgets provide validated checkpoints; an optional coordinator coalesces requests and never retries automatically. Integrators choose the observation sources, analysis triggers and cost limits.
+
 The public API is documented in [API.md](docs/API.md). [BOUNDARIES.md](docs/BOUNDARIES.md) describes data ownership, bounded storage, failure handling and release checks. [RESEARCH.md](docs/RESEARCH.md) records upstream research and reuse decisions.
 
 In-memory queues and deduplication are bounded and do not promise permanent exactly-once delivery. Providers are trusted application code, not sandboxed plugins. The display lease is a separate primitive with caller-supplied ranking and timing. Model integrations, storage and domain policies belong to the integrating application.
 
 ```sh
-node scripts/archive.cjs ../assistant-core-0.1.0.tar
+node scripts/archive.cjs ../assistant-core-0.2.0.tar
 ```
 
 This audits actual archive bytes using the system `tar` tool. Maintainers must separately audit the archive against private content references; generic scanning alone cannot prove their absence. MIT licensed; the public repository is [frostynight-furry/furryup-live-assistant-core](https://github.com/frostynight-furry/furryup-live-assistant-core). `private: true` prevents accidental npm publication. CI only verifies changes; no automatic publishing is configured.

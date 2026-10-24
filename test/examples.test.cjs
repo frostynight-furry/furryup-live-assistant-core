@@ -1,7 +1,7 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { replay } = require('../examples/scenarios.cjs');
+const { replay, replayRealtime } = require('../examples/scenarios.cjs');
 const { createDemoServer } = require('../examples/server.cjs');
 test('replay exercises silent output, memory, pause, feedback, expiry and room reset', async () => {
   const report = await replay(); assert.equal(report.synthetic, true);
@@ -9,6 +9,14 @@ test('replay exercises silent output, memory, pause, feedback, expiry and room r
   assert.equal(steps[4].pending, 1); assert.equal(steps[4].displayed, null);
   assert.ok(steps[5].displayed); assert.deepEqual(steps[6].terminal, ['adopted']);
   assert.deepEqual(steps[8].terminal, ['adopted','expired']); assert.deepEqual(steps[9].terminal, []);
+});
+
+test('realtime replay demonstrates freshness, obsolete-result rejection and bounded reservations', async () => {
+  const result = await replayRealtime();
+  assert.equal(result.synthetic, true); assert.equal(result.timestampRefreshPreserved, true);
+  assert.equal(result.obsolete, 'stale'); assert.equal(result.current, 'completed'); assert.equal(result.duplicate, 'duplicate');
+  assert.equal(result.exhausted, 'budget'); assert.equal(result.calls, 2); assert.equal(result.budget.used, 2);
+  assert.equal(result.checkpoint.reservations.length, 2);
 });
 test('loopback demo serves only fixed files and requires a session token for mutations', async t => {
   const server = createDemoServer(); await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
