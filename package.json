@@ -1,0 +1,22 @@
+{
+  "name": "@furryup/live-assistant-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Content-free livestream assistant runtime, adapters and synthetic replay",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/frostynight-furry/furryup-live-assistant-core.git" },
+  "bugs": { "url": "https://github.com/frostynight-furry/furryup-live-assistant-core/issues" },
+  "type": "commonjs",
+  "main": "core/index.cjs",
+  "types": "core/index.d.ts",
+  "exports": { ".": { "types": "./core/index.d.ts", "require": "./core/index.cjs", "default": "./core/index.cjs" } },
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "test": "node --test test/*.test.cjs",
+    "demo": "node examples/replay.cjs",
+    "demo:web": "node examples/server.cjs",
+    "audit": "node scripts/audit-source.cjs",
+    "verify": "node scripts/verify.cjs"
+  },
+  "files": ["core/", "examples/", "docs/", "test/", "scripts/", "README.md", "README.en.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "CHANGELOG.md", "source-files.json"]
+}

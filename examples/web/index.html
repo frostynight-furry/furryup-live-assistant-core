@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FurryUP Assistant Core · 合成演示</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body><main><header><span class="badge">SYNTHETIC · OFFLINE</span><h1>直播助手框架演示</h1><p>用合成事件检查提醒、反馈和会话切换。无需账号、直播间或模型服务。</p></header>
+<section aria-labelledby="controls"><h2 id="controls">运行控制</h2><div class="buttons"><button data-action="event">添加合成事件</button><button data-action="observe">保持观察</button><button data-action="remember">更新上下文</button><button data-action="suggest">生成演示卡片</button><button data-action="pause">暂停新提醒</button><button data-action="resume">恢复提醒</button><button data-action="expire">推进至过期</button><button data-action="reset">切换会话</button></div><p id="status" role="status"></p></section>
+<div class="grid"><section><h2>当前提醒</h2><div id="card" aria-live="polite"></div><div class="buttons"><button data-action="adopted">采纳</button><button data-action="rejected">拒绝</button><button data-action="dismissed">关闭</button></div><p id="pending"></p></section>
+<section><h2>运行轨迹</h2><p class="muted">记录状态变化，不包含消息正文。</p><ol id="trace"></ol></section></div><footer>演示内容只验证程序流程，不提供直播运营建议。</footer></main></body></html>
