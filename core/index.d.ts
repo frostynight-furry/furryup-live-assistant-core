@@ -40,3 +40,46 @@ export function createDisplayLease<T extends DisplayItem>(options: { now?: () =>
   interact(input: { id: string; reason: 'pointer' | 'focus' | 'manual'; active: boolean }): boolean;
   replace(id: string, item: T): boolean;
 };
+
+export type FactInput = {
+  key: string; source: string;
+  observedAt: number; ttlMs: number; reason?: string | null;
+} & ({ status: 'known'; value: JsonValue } | { status: 'unknown'; value?: null });
+export interface RealtimeFact {
+  readonly key: string; readonly source: string; readonly status: 'fresh' | 'stale' | 'unknown';
+  readonly value: JsonValue; readonly observedAt: number; readonly expiresAt: number; readonly revision: number; readonly reason: string | null;
+}
+export interface ContextToken {
+  readonly scope: string; readonly generation: number; readonly revision: number; readonly all: boolean;
+  readonly versions: readonly { readonly key: string; readonly revision: number }[];
+}
+export interface RealtimeSnapshot {
+  readonly active: boolean; readonly scope: string | null; readonly generation: number; readonly revision: number; readonly at: number;
+  readonly facts: Readonly<Record<string, RealtimeFact>>;
+}
+export interface RealtimeState {
+  start(scope: string): void; stop(): void; patch(facts: FactInput[]): boolean;
+  snapshot(): RealtimeSnapshot; capture(keys?: string[]): ContextToken; isCurrent(token: unknown): boolean;
+  subscribe(listener: (event: Readonly<{ scope: string | null; generation: number; revision: number }>) => void): () => void;
+}
+export function createRealtimeState(options?: { now?: () => number; limit?: number }): RealtimeState;
+export interface BudgetCheckpoint { readonly schemaVersion: 1; readonly reservations: readonly { readonly key: string; readonly at: number; readonly cost: number }[] }
+export interface BudgetSnapshot {
+  readonly used: number; readonly remaining: number; readonly capacity: number; readonly reservations: number;
+  readonly nextAvailableAt: number | null; readonly windowMs: number; readonly minIntervalMs: number;
+}
+export interface AnalysisBudget {
+  tryAcquire(key: string, cost?: number): { allowed: boolean; reason: 'allowed' | 'duplicate' | 'interval' | 'budget' | 'capacity'; retryAt: number | null };
+  snapshot(): BudgetSnapshot; checkpoint(): BudgetCheckpoint;
+}
+export function createAnalysisBudget(options: { capacity: number; windowMs: number; minIntervalMs: number; now?: () => number; initialState?: BudgetCheckpoint; reservationLimit?: number }): AnalysisBudget;
+export type ScheduledResult<R> = { status: 'completed'; value: R; durationMs: number } | {
+  status: 'cancelled' | 'timeout' | 'failed' | 'invalid' | 'paused' | 'busy' | 'duplicate' | 'interval' | 'budget' | 'capacity' | 'stale'; durationMs?: number; retryAt?: number | null;
+};
+export function createAnalysisScheduler<T, R>(options: {
+  state: RealtimeState; budget: AnalysisBudget; provider: (context: T, options: { signal: AbortSignal }) => R | Promise<R>;
+  timeoutMs?: number; now?: () => number; historyLimit?: number;
+}): {
+  request(input: { key: string; context: T; dependencies?: string[]; cost?: number }): Promise<ScheduledResult<R>>;
+  cancel(): void; pause(value?: boolean): void; snapshot(): { busy: boolean; paused: boolean; handled: number; budget: BudgetSnapshot }; dispose(): void;
+};

@@ -27,3 +27,11 @@ Public checks include an exact file allowlist, UTF-8/binary validation, encoded 
 Before distribution, maintainers must also compare the actual source archive and staged Git blobs against private content references. That gate must refuse to proceed if references are missing and must not copy references or excerpts into the report. A fresh repository must not inherit private Git history. Public CI does not have access to private references and cannot substitute for this maintainer check.
 
 No scanner can determine every semantic paraphrase or detect all possible obfuscation. Structural isolation, explicit file review and synthetic-only examples are required in addition to byte/text checks. This release makes no claim about real-platform long-running reliability or the quality of any private strategy.
+
+## Realtime and cost boundaries
+
+The realtime store accepts explicit facts; it does not connect to OBS, infer a scene, classify a conversation or supply freshness thresholds. Hosts own source validation and decide which facts invalidate a request. Timestamp-only updates do not create semantic changes, while lost freshness does. Expiry is evaluated on access rather than by background timers.
+
+The cost ledger reserves caller-selected units. Saving checkpoints, enforcing model input/output limits and defining monetary upper bounds belong to the host. Cancelled or failed work can still incur provider cost, so reservations are retained. The ledger does not reset when context or pause state changes. A new object without restored state is a new ledger; multiple processes require external coordination. Synthetic test limits do not recommend a product budget.
+
+The optional coordinator never decides when a livestream deserves analysis. It only accepts explicit requests and refuses duplicates, stale work or budget violations. Trigger logic, useful evidence selection, private prompts and model responses are not added to diagnostic exports or public examples.

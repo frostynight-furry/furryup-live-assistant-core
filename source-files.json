@@ -3,10 +3,10 @@
   "files": [
     ".gitattributes", ".gitignore", ".github/workflows/test.yml",
     "package.json", "source-files.json", "LICENSE", "THIRD_PARTY_NOTICES.md", "CHANGELOG.md", "README.md", "README.en.md",
-    "core/index.cjs", "core/index.d.ts", "core/contracts.cjs", "core/display.cjs", "core/templates.cjs", "core/journal.cjs", "core/queue.cjs", "core/provider.cjs", "core/runtime.cjs", "core/liveconnect.cjs",
+    "core/index.cjs", "core/index.d.ts", "core/contracts.cjs", "core/display.cjs", "core/templates.cjs", "core/journal.cjs", "core/queue.cjs", "core/provider.cjs", "core/runtime.cjs", "core/liveconnect.cjs", "core/state.cjs", "core/budget.cjs", "core/scheduler.cjs",
     "examples/scenarios.cjs", "examples/replay.cjs", "examples/server.cjs", "examples/web/index.html", "examples/web/app.js", "examples/web/style.css",
     "docs/API.md", "docs/BOUNDARIES.md", "docs/RESEARCH.md",
     "scripts/audit-source.cjs", "scripts/archive.cjs", "scripts/verify.cjs",
-    "test/runtime.test.cjs", "test/examples.test.cjs", "test/audit.test.cjs"
+    "test/runtime.test.cjs", "test/examples.test.cjs", "test/audit.test.cjs", "test/realtime.test.cjs"
   ]
 }
