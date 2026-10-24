@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — Unreleased
+## 0.2.0 — 2026-10-24
 
 - Atomic realtime facts with source timestamps, explicit unknown/stale states and scoped dependency tokens.
 - Semantic changes invalidate results; timestamp-only refreshes preserve valid work.
