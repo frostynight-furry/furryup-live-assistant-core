@@ -83,3 +83,31 @@ export function createAnalysisScheduler<T, R>(options: {
   request(input: { key: string; context: T; dependencies?: string[]; cost?: number }): Promise<ScheduledResult<R>>;
   cancel(): void; pause(value?: boolean): void; snapshot(): { busy: boolean; paused: boolean; handled: number; budget: BudgetSnapshot }; dispose(): void;
 };
+
+export interface SimultaneousViewersSnapshot {
+  schemaVersion: 1; scope: 'four-platforms'; freshnessMs: number;
+  current: { at: number; total: number | null; observedTotal: number | null; complete: boolean; counts: { platform: string; watching: number | null; sampledAt: number | null }[]; missingPlatforms: string[] };
+  peak: number | null; peakAt: number | null; peakCounts: { platform: string; watching: number | null }[];
+  average: number | null; averageMode: 'time-weighted-complete-coverage'; coveredMs: number; elapsedMs: number; coverageRatio: number;
+  timeline: { at: number; coveredMs: number; average: number | null; peak: number | null; peakAt: number | null }[];
+  timelineTruncated: boolean; note: string;
+}
+export function createSimultaneousViewers(options?: { startedAt?: number }): {
+  update(at: number, rows: { platform: string; active?: boolean; watching?: number | null; sampledAt?: number | null }[]): void;
+  advance(at: number): void;
+  snapshot(at?: number): SimultaneousViewersSnapshot | null;
+  seal(at?: number): SimultaneousViewersSnapshot | null;
+};
+export function publicSimultaneousViewers(value: unknown): SimultaneousViewersSnapshot | null;
+export function createViewerPresence(options?: { now?: () => number; monotonicNow?: () => number; getSettings?: () => unknown }): {
+  ingest(event: unknown): boolean;
+  observe(value: unknown): boolean;
+  sync(connections?: unknown[]): boolean;
+  snapshot(options?: { connections?: unknown[] }): Record<string, unknown>;
+  candidates(): Record<string, unknown>[];
+  consume(id: string): boolean;
+  valid(id: string): boolean;
+  configure(value: unknown): Record<string, unknown>;
+  reset(): void;
+  dispose(): void;
+};

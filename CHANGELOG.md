@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 - 2026-11-08
+
+- Added `core/simultaneous-viewers.cjs` (`createSimultaneousViewers`, `publicSimultaneousViewers`) for four-platform time-weighted complete-coverage simultaneous viewer aggregation, minute-bucket peak/average timeline tracking, and archive-boundary sanitization.
+- Added `core/viewer-presence.cjs` (`createViewerPresence`, `DEFAULT_VIEWER_PRESENCE_SETTINGS`) for monotonic-clock online-list viewer dwell verification with wall-clock discontinuity protection and per-platform level thresholds.
+- Added TypeScript declarations in `core/index.d.ts` and unit tests in `test/presence-viewers.test.cjs`.
+
 ## 0.2.0 — 2026-10-24
 
 - Atomic realtime facts with source timestamps, explicit unknown/stale states and scoped dependency tokens.
